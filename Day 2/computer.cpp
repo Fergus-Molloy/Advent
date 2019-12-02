@@ -10,12 +10,12 @@ using namespace std;
 namespace program{
     vector<string> memory;
     enum INSTRUCTIONS{
-        ADD      = 1, // instruction set starts at 1
+        ADD      = 1, // instruction set
         MULTIPLY = 2,
         HALT     = 99
     };
     enum IOSTREAM{
-        OUTPUT_ADDR = 0,
+        OUTPUT_ADDR = 0, // addrs values for output and input values
         NOUN_ADDR   = 1,
         VERB_ADDR   = 2
     };
@@ -37,6 +37,7 @@ int main(){
     return 0;
 }
 
+// Split string using the specified delimter
 vector<string> split(string text, char delimiter){
     vector<string> tokens;
     int prev=0;
@@ -49,6 +50,7 @@ vector<string> split(string text, char delimiter){
     return tokens;
 }
 
+// Convert string to integer
 int str_to_int(string text){
     stringstream ss(text);
     int value;
@@ -56,6 +58,7 @@ int str_to_int(string text){
     return value;
 }
 
+// Read all text from a file into a string
 string readall(string filename){
     ifstream infile(filename);
     stringstream ss;
@@ -65,11 +68,13 @@ string readall(string filename){
     return data;
 }
 
+// To call when the instructions have been processed
 void finish(){
     cout << "Output: " << str_to_int(program::memory[program::OUTPUT_ADDR]) << endl;
     return;
 }
 
+// Does the computation for the given instruction
 int compute(int instruction, int value1, int value2){
     switch(instruction){
         case(program::ADD):
@@ -77,6 +82,7 @@ int compute(int instruction, int value1, int value2){
         case(program::MULTIPLY):
             return value1 * value2;
         case(program::HALT):
+            // TODO: find a better way of halting
             finish();
             return -1;
         default:
@@ -85,6 +91,7 @@ int compute(int instruction, int value1, int value2){
     }
 }
 
+// Print the instruction at a given location --For debuging use
 void print_instruction(int addr){
         cout << "Instruction:\n" 
         << program::memory[addr]   << ","
@@ -93,6 +100,7 @@ void print_instruction(int addr){
         << program::memory[addr+3] << endl;
 }
 
+// Print the decoded instruction at a given location --For debuging use
 void print_decoded_instuction(int inst, int value1, int value2, int addr){
     cout << "Decoded Instruction:\n" 
         << inst   << ","
@@ -101,12 +109,14 @@ void print_decoded_instuction(int inst, int value1, int value2, int addr){
         << str_to_int(program::memory[addr]) << endl;
 }
 
+// Run the instruction set provided in the file
 void run_code_file(string filename){
     string data = readall(filename);
     program::memory = split(data, ',');
     main_loop();
 }
 
+// Run the instruction set provided but set the noun and verb before execution
 void run_code_file(string filename, int noun, int verb){
     string data = readall(filename);
     program::memory = split(data, ',');
@@ -116,15 +126,19 @@ void run_code_file(string filename, int noun, int verb){
     
 }
 
+// Steps through the program loaded in memory and executes it
 void main_loop(){
     int result;
     for(int i=0; i<program::memory.size(); i+=4){
+        //read the instruction, memory locations for values and
+        //the memory location for storing the address
         int  inst, var1, var2, addr;
         inst = str_to_int(program::memory[i]);   // instruction
         var1 = str_to_int(program::memory[i+1]); // address of value 1
         var2 = str_to_int(program::memory[i+2]); // address of value 2
         addr = str_to_int(program::memory[i+3]); // address to store at e.g. 0
         
+        //value to use for computation
         int value1, value2;
         value1 = str_to_int(program::memory[var1]);
         value2 = str_to_int(program::memory[var2]);
@@ -133,8 +147,9 @@ void main_loop(){
         print_instruction(i);
         print_decoded_instruction(inst, value1, value2, addr)        
         #endif
+
         result = compute(inst, value1, value2);
-        if(result != -1)
+        if(result != -1) //if halt was called
             program::memory[addr] = to_string(result);
         else
             break;
