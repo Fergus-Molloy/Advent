@@ -2,6 +2,7 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include <string>
 #include "computer.h"
 
 using namespace std;
@@ -19,19 +20,19 @@ namespace program{
 int main(){
     string data = readall("input.txt");
     program::memory = split(data, ',');
-    cout << program::memory[0] << endl;
     for(int i=0; i<program::memory.size(); i+=4){
         int  inst, var1, var2, addr;
-        inst = str_to_int(program::memory[i]);
-        var1 = str_to_int(program::memory[i+1]);
-        var2 = str_to_int(program::memory[i+2]);
-        addr = str_to_int(program::memory[i+3]); //address to store at e.g. 0
+
+        inst = str_to_int(program::memory[i]);   // instruction
+        var1 = str_to_int(program::memory[i+1]); // address of value 1
+        var2 = str_to_int(program::memory[i+2]); // address of value 2
+        addr = str_to_int(program::memory[i+3]); // address to store at e.g. 0
         
         int value1, value2;
         value1 = str_to_int(program::memory[var1]);
         value2 = str_to_int(program::memory[var2]);
         
-        /*
+        #ifdef DEBUG
         cout << "Instruction:\n" 
         << program::memory[i]   << ","
         << program::memory[i+1] << ","
@@ -39,13 +40,12 @@ int main(){
         << program::memory[i+3] << endl;
         cout << "Decoded Instruction:\n" 
         << str_to_int(program::memory[i])   << ","
-        << str_to_int(program::memory[value1]) << ","
-        << str_to_int(program::memory[value2]) << ","
+        << value1 << ","
+        << value2 << ","
         << str_to_int(program::memory[addr]) << endl;
-        */
-        int result = compute(inst, value1, value2);
-        cout << "Result: " << result << endl;
-        program::memory[addr] = result;        
+        #endif
+
+        program::memory[addr] = to_string(compute(inst, value1, value2));
     }
     finish();
     return 0;
@@ -75,6 +75,7 @@ string readall(string filename){
     stringstream ss;
     ss << infile.rdbuf();
     string data = ss.str();
+    infile.close();
     return data;
 }
 
