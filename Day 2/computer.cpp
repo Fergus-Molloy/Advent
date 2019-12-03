@@ -42,14 +42,6 @@ int main(){
 }
 
 
-// Convert string to integer
-int str_to_int(string text){
-    stringstream ss(text);
-    int value;
-    ss >> value;
-    return value;
-}
-
 void finish(){
     int result = str_to_int(program::memory[program::OUTPUT_ADDR]);
     cout << "Output: " << result << endl;

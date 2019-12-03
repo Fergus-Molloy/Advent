@@ -1,21 +1,33 @@
 #ifndef WIRES_D
 #define WIRES_D
 #include <string>
+#include "../general.h"
 
 class Wire{
-    public:
+private:
+	void calculatePoints();
+
+
+	int length;
+	std::vector<std::string> path;
+	std::vector<Point> points;
+    
+
+public:
     Wire();
+
+	Wire(std::vector<std::string> path);
 
     int getLength();
 
-    std::string getPath();
+    std::vector<std::string> getPath();
 
-    void setPath(std::string path);
+    void setPath(std::vector<std::string> path);
 
+	std::vector<Point> getPoints();
 
-    private:
-    int length;
-    std::string path;
+	int distToPoint(Point p);
+
 };
 
 

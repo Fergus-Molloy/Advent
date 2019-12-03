@@ -1,6 +1,7 @@
 #include <sstream>
 #include <vector>
 #include <fstream>
+#include "general.h"
 
 std::vector<std::string> split(std::string text, char delimiter){
     std::vector<std::string> tokens;
@@ -16,6 +17,8 @@ std::vector<std::string> split(std::string text, char delimiter){
 
 std::string readall(std::string filename){
     std::ifstream infile(filename);
+	if (!infile)
+		throw "Couldn't open file\n";
     std::stringstream ss;
     ss << infile.rdbuf();
     std::string data = ss.str();
@@ -25,10 +28,25 @@ std::string readall(std::string filename){
 
 std::vector<std::string> read_file_lines(std::string filename){
     std::ifstream infile(filename);
+	if (!infile)
+		throw "Couldn't open file\n";
     std::string line;
     std::vector<std::string> lines;
     while(getline(infile, line)){
         lines.push_back(line);
     }
+	infile.close();
     return lines;
+}
+
+// Convert string to integer
+int str_to_int(std::string text) {
+	std::stringstream ss(text);
+	int value;
+	ss >> value;
+	return value;
+}
+
+bool operator==(const Point& lhs, const Point& rhs) {
+	return (lhs.x == rhs.x && lhs.y == rhs.y);
 }

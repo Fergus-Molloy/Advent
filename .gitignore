@@ -40,3 +40,5 @@
 
 .vscode/**
 **/test*
+*.sln
+*vcxproj*
