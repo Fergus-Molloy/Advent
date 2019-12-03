@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cmath>
 #include <fstream>
-#include <vector>
 #include <sstream>
 
 using namespace std;
@@ -16,7 +15,6 @@ int fuel(int mass){
 }
 
 int main(){
-    vector<string> lines;
     ifstream infile("input.txt");
     string line;
     int sum=0;
