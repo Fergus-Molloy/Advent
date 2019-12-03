@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include "../general.h"
 #include "computer.h"
 
 using namespace std;
@@ -23,6 +24,8 @@ namespace program{
 
 
 int main(){
+    run_code_file("input2.txt", 89, 9);
+    /*
     int output;
     for(int i=0; i<100; i++){
         for(int j=0; j<100; j++){
@@ -34,20 +37,10 @@ int main(){
             }
         }
     }
+    */
     return 0;
 }
 
-vector<string> split(string text, char delimiter){
-    vector<string> tokens;
-    int prev=0;
-    int pos= text.find(delimiter);
-    while(pos!=std::string::npos){
-        tokens.push_back(text.substr(prev, pos-prev));
-        prev = pos + 1;
-        pos = text.find(delimiter, prev);
-    }
-    return tokens;
-}
 
 int str_to_int(string text){
     stringstream ss(text);
@@ -56,17 +49,12 @@ int str_to_int(string text){
     return value;
 }
 
-string readall(string filename){
-    ifstream infile(filename);
-    stringstream ss;
-    ss << infile.rdbuf();
-    string data = ss.str();
-    infile.close();
-    return data;
-}
-
 void finish(){
-    cout << "Output: " << str_to_int(program::memory[program::OUTPUT_ADDR]) << endl;
+    int result = str_to_int(program::memory[program::OUTPUT_ADDR]);
+    cout << "Output: " << result << endl;
+    if(result==RESULT){
+        cout << "found the result" << endl;
+    }
     return;
 }
 
