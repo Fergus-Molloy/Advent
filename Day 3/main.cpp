@@ -10,17 +10,17 @@ using namespace std;
 
 
 std::vector<Point> intersectPoints(const std::vector<Point> points1, const std::vector<Point> points2) {
-	std::vector<Point> interects;
+	std::vector<Point> intersects;
 	Point p{ 0,0 };
-	interects.push_back(p);
+	intersects.push_back(p);
 
 	for (auto point1 : points1) {
 		if (find(points2.begin(), points2.end(), point1) != points2.end() 
-			&& find(interects.begin(), interects.end(), point1) == interects.end()) {
-				interects.push_back(point1);
+			&& find(intersects.begin(), intersects.end(), point1) == intersects.end()) {
+				intersects.push_back(point1);
 		}
 	}
-	return interects;
+	return intersects;
 }
 
 int min(vector<int> values) {
