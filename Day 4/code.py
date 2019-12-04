@@ -28,7 +28,6 @@ def check_increase(num):
             return False
     return True
 
-
 for x in all_possibilities:
     if check_double(x):
         if(check_increase(x)):
