@@ -5,11 +5,15 @@ template <class Type> class Node{
 public:
     Type data;
     std::vector<Node<Type>> children;
+
+    Node(Type data);
 };
 
 template <class Type> class Tree{
 public:
     Tree();
+
+    Tree(Type data);
 
     void addNode(Type data, Type parent);
 
@@ -19,8 +23,8 @@ public:
 
     Node<Type> search(Type item);
 
+    void setRoot(Type data);
 
-private:
     Node<Type> root;
 }
 #endif
