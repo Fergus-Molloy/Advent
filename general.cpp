@@ -3,12 +3,24 @@
 #include <fstream>
 #include "general.h"
 
-std::vector<std::string> split(std::string text, char delimiter){
+std::vector<std::string> split_str(std::string text, char delimiter){
     std::vector<std::string> tokens;
     int prev=0;
     int pos= text.find(delimiter);
     while(pos!=std::string::npos){
         tokens.push_back(text.substr(prev, pos-prev));
+        prev = pos + 1;
+        pos = text.find(delimiter, prev);
+    }
+    return tokens;
+}
+
+std::vector<int> split_int(std::string text, char delimiter){
+    std::vector<int> tokens;
+    int prev=0;
+    int pos= text.find(delimiter);
+    while(pos!=std::string::npos){
+        tokens.push_back(str_to_int(text.substr(prev, pos-prev)));
         prev = pos + 1;
         pos = text.find(delimiter, prev);
     }

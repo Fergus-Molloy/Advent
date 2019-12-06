@@ -100,7 +100,6 @@ void run_code_file(string filename, int noun, int verb){
     program::memory[program::NOUN_ADDR] = noun;
     program::memory[program::VERB_ADDR] = verb;
     main_loop();
-    
 }
 
 // Steps through the program loaded in memory and executes it

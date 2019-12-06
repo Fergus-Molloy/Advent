@@ -6,7 +6,9 @@ struct Point {
 	int y;
 };
 
-std::vector<std::string> split(std::string text, char delimiter);
+std::vector<int> split_int(std::string text, char delimiter);
+
+std::vector<std::string> split_str(std::string text, char delimiter);
 
 std::string readall(std::string filename);
 
