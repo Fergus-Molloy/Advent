@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <bits/stdc++.h> //for reverse()
+#include "computer.h"
 #include "../general.h"
 
 using namespace std;
@@ -33,10 +35,104 @@ namespace program{
     };
 }
 int main(){
-
-
+    run_code_file("input2.txt");
+    return 0;
 }
 
+vector<int> decode(int instruction){
+    string inst = to_string(instruction);
+    reverse(inst.begin(), inst.end());
+    vector<int> decoded;
+    if(inst.length()==1){
+        decoded.push_back(instruction);
+    }
+    else{
+        for (int i=0; i<inst.length(); i++){
+            if(i==1)
+                continue;
+            decoded.push_back(inst[i]-'0');
+        }
+    }
+    while(decoded.size()!=4){
+            decoded.push_back(program::POSITIONAL);
+    }
+    return decoded;
+}
+int get_size(int opcode){
+    switch(opcode){
+        case(program::ADD):
+            return program::ADD_SIZE;
+        case(program::MULTIPLY):
+            return program::MULTIPLY_SIZE;
+        case(program::OUTPUT):
+            return program::OUTPUT_SIZE;
+        case(program::INPUT):
+            return program::INPUT_SIZE;
+        case(program::HALT):
+            return program::HALT_SIZE;
+        default:
+            cerr << "uknown instruction, received " << opcode << endl;
+            return -1;
+    }
+}
+
+void execute(vector<int> inst, int size, int pc){
+    vector<int> data;
+    for(int i=1; i<inst.size(); i++){ //get relevant data
+        if(!inst[i]){
+            //position mode
+            data.push_back(program::memory[program::memory[pc+i]]);
+        }
+        else{
+            //immediate mode
+            data.push_back(program::memory[pc+i]);
+        }
+    }
+    switch(inst[0]){
+        case(1):
+            add(data);
+        break;
+        case(2):
+            multiply(data);
+        break;
+        case(3):
+            input(data);
+        break;
+        case(4):
+            output(data);
+        break;
+        case(99):
+            halt();
+        break;
+        default:
+            cerr << "Unknown instruction " << inst[0] << endl;
+
+    }
+}
+
+void print_decoded(vector<int> inst){
+    for(int x=0; x<inst.size(); x++){
+        cout << inst[x] << " , ";
+    }
+    cout << endl;
+}
+
+void main_loop(){
+    int pc=0;
+    vector<int> inst;
+    int size;
+    int opcode;
+    while(program::run){
+        opcode = program::memory[pc];
+        inst = decode(opcode);
+        print_decoded(inst);
+        size = get_size(inst[0]);
+        //execute(inst, size, pc);
+        program::run = false;
+    }
+}
+
+// ----- RUN CODE FILE -----
 void run_code_file(string filename){
     string data = readall(filename);
     program::memory = split_int(data, ',');
@@ -50,56 +146,4 @@ void run_code_file(string filename, int noun, int verb){
     program::memory[program::NOUN_ADDR] = noun;
     program::memory[program::VERB_ADDR] = verb;
     main_loop();
-}
-
-vector<int> decode(int instruction){
-    string inst = to_string(instruction);
-    vector<int> decoded;
-    if(inst.length()==1){
-        decoded.push_back(instruction);
-    }
-    else{
-        decoded.push_back(stoi(inst.substr(inst.size() - 2)));
-        for(int i=inst.length()-3; i > 0; i--){
-            if(!stoi(inst.substr(i,1))) // if o
-                decoded.push_back(program::POSITIONAL);
-            else
-                decoded.push_back(program::DIRECT);
-        }
-    }
-    while(decoded.size()!=4){
-            decoded.push_back(program::POSITIONAL);
-    }
-    return decoded;
-}
-int get_size(int opcode){
-    string inst = to_string(opcode);
-    int operation = stoi(inst.substr(inst.length()-2));
-    switch(operation){
-        case(program::ADD):
-            return program::ADD_SIZE;
-        case(program::MULTIPLY):
-            return program::MULTIPLY_SIZE;
-        case(program::OUTPUT):
-            return program::OUTPUT_SIZE;
-        case(program::INPUT):
-            return program::INPUT_SIZE;
-        case(program::HALT):
-            return program::HALT_SIZE;
-        default:
-            cerr << "uknown instruction, received " << operation << endl;
-            return -1;
-    }
-}
-
-void main_loop(){
-    int pc=0;
-    vector<int> inst;
-    int size;
-    int opcode;
-    while(program::run){
-        opcode = program::memory[pc];
-        inst = decode(opcode);
-        size = get_size(opcode);
-    }
 }
