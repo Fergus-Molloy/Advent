@@ -13,8 +13,6 @@ public:
 
 template <class Type> class Tree{
 public:
-    Tree();
-
     Tree(Type data);
 
     void addNode(Type data, Type parent);
@@ -26,6 +24,8 @@ public:
     Node<Type> search(Type item);
 
     void setRoot(Type data);
+
+	Node<Type> getRoot();
 
     Node<Type> root;
 };
@@ -46,10 +46,15 @@ Tree<Type>::Tree(Type data){
     setRoot(data);
 }
 
+template<class Type>
+Tree<Type>::getRoot() {
+	return root;
+}
+
 int main(){
     std::string name = "COM";
     Tree<int> tree(name);
-    
+	std::cout << tree.getRoot().data << std::endl;
 
     return 0;
 }

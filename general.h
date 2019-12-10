@@ -17,6 +17,8 @@ std::vector<std::string> read_file_lines(std::string filename);
 // Convert string to integer
 int str_to_int(std::string text);
 
+int char_to_int(char text);
+
 bool operator==(const Point& lhs, const Point& rhs);
 
 #endif

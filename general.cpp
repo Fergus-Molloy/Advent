@@ -59,6 +59,15 @@ int str_to_int(std::string text) {
 	return value;
 }
 
+// Convert string to integer
+int char_to_int(char text) {
+    if(text<48 || text>58){
+        throw "character is not a number";
+        exit(1);
+    }
+	return text - '0';
+}
+
 bool operator==(const Point& lhs, const Point& rhs) {
 	return (lhs.x == rhs.x && lhs.y == rhs.y);
 }
